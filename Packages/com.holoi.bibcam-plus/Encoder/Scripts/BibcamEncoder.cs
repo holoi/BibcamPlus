@@ -41,7 +41,7 @@ public sealed class BibcamEncoder : MonoBehaviour
     void Start()
     {
         _material = new Material(_shader);
-        _encoded = GfxUtil.RGBARenderTexture(1920, 1080);
+        _encoded = GfxUtil.RGBARenderTexture(3840, 2160);
         _metadata = GfxUtil.StructuredBuffer(12, sizeof(float));
         Application.onBeforeRender += OnBeforeApplicationRender;
     }

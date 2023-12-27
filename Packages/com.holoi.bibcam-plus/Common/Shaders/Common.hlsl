@@ -1,5 +1,5 @@
 // Bibcam format configuration
-static const uint2 BibcamFrameSize = uint2(1920, 1080);
+static const uint2 BibcamFrameSize = uint2(3840, 2160);
 
 // yCbCr decoding
 float3 YCbCrToSRGB(float y, float2 cbcr)
@@ -71,37 +71,48 @@ float DecodeDepth(float3 rgb, float2 range)
 // +-----+-----+
 //
 
+// +-----+-----+-----+-----+
+// |     |     |     |     |  Z: Hue-encoded depth
+// |     |     |     |     |  Z: Hue-encoded depth
+// +-----+-----+-----+-----+  C: Color
+// |  Z  |     |     |     |  Z: Hue-encoded depth
+// +-----+  C  |     |     |  S: Human stencil
+// | S/M |     |     |     |  M: Metadata
+// +-----+-----+-----+-----+
+//
+
+
 float2 UV_FullToStencil(float2 uv)
 {
-    return uv * 2;
+    return uv * 4;
 }
 
 float2 UV_FullToDepth(float2 uv)
 {
-    uv *= 2;
+    uv *= 4;
     uv.y -= 1;
     return uv;
 }
 
 float2 UV_FullToColor(float2 uv)
 {
-    uv.x = uv.x * 2 - 1;
+    uv.x = (uv.x - 0.25) * 4 / 3;
     return uv;
 }
 
 float2 UV_StencilToFull(float2 uv)
 {
-    return uv * 0.5;
+    return uv * 0.25;
 }
 
 float2 UV_DepthToFull(float2 uv)
 {
-    return uv * 0.5 + float2(0, 0.5);
+    return uv * 0.25 + float2(0, 0.25);
 }
 
 float2 UV_ColorToFull(float2 uv)
 {
-    uv.x = lerp(0.5, 1, uv.x);
+    uv.x = lerp(0.25, 1, uv.x);
     return uv;
 }
 
@@ -109,5 +120,5 @@ float2 UV_ColorToFull(float2 uv)
 
 float3 BibcamMux(float2 uv, float m, float3 c, float3 z, float s)
 {
-    return uv.x > 0.5 ? c : (uv.y > 0.5 ? z : float3(s, 0, m));
+    return uv.x > 0.25 ? c : (uv.y > 0.5 ? float3(0, 0, 0) : (uv.y > 0.25 ? z : float3(s, 0, m)));
 }

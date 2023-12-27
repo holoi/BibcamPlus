@@ -30,8 +30,8 @@ public sealed class BibcamTextureDemuxer : MonoBehaviour
 
         // Lazy initialization for demuxing buffers
         var (w, h) = (source.width, source.height);
-        if (_color == null) _color = GfxUtil.RGBARenderTexture(w / 2, h);
-        if (_depth == null) _depth = GfxUtil.RHalfRenderTexture(w / 2, h / 2);
+        if (_color == null) _color = GfxUtil.RGBARenderTexture(w / 4 * 3, h);
+        if (_depth == null) _depth = GfxUtil.RHalfRenderTexture(w / 4, h / 4);
 
         // Demux shader invocations
         _material.SetInteger(ShaderID.Margin, _margin);
