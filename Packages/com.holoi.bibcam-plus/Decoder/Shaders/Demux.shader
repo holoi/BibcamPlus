@@ -8,7 +8,7 @@ Shader "Hidden/Bibcam/Demux"
     CGINCLUDE
 
 #include "UnityCG.cginc"
-#include "Packages/jp.keijiro.bibcam/Common/Shaders/Common.hlsl"
+#include "Packages/com.holoi.bibcam-plus/Common/Shaders/Common.hlsl"
 
 Texture2D _MainTex;
 uint _Margin;
@@ -20,8 +20,8 @@ void VertexColor(float4 position : POSITION,
                  out float4 outTexCoord : TEXCOORD)
 {
     outPosition = UnityObjectToClipPos(position);
-    outTexCoord = texCoord.xyxy * BibcamFrameSize.xyxy / float4(2, 1, 2, 2);
-    outTexCoord.x += BibcamFrameSize.x / 2;
+    outTexCoord = texCoord.xyxy * BibcamFrameSize.xyxy / float4(4 / 3.0, 1, 4, 4);
+    outTexCoord.x += BibcamFrameSize.x / 4;
 }
 
 float4 FragmentColor(float4 position : SV_Position,
@@ -42,16 +42,16 @@ void VertexDepth(float4 position : POSITION,
                  out float2 outTexCoord : TEXCOORD)
 {
     outPosition = float4(position.x * 2 - 1, 1 - position.y * 2, 1, 1);
-    outTexCoord = texCoord * BibcamFrameSize / 2;
-    outTexCoord.y += BibcamFrameSize.y / 2;
+    outTexCoord = texCoord * BibcamFrameSize / 4;
+    outTexCoord.y += BibcamFrameSize.y / 4;
 }
 
 float4 FragmentDepth(float4 position : SV_Position,
                      float2 texCoord : TEXCOORD) : SV_Target
 {
     uint2 tc = texCoord;
-    tc.x = min(tc.x, BibcamFrameSize.x / 2 - 1 - _Margin);
-    tc.y = max(tc.y, BibcamFrameSize.y / 2 + _Margin);
+    tc.x = min(tc.x, BibcamFrameSize.x / 4 - 1 - _Margin);
+    tc.y = max(tc.y, BibcamFrameSize.y / 4 + _Margin);
     float3 rgb = _MainTex[tc].rgb;
     #ifndef UNITY_NO_LINEAR_COLORSPACE
     rgb = LinearToGammaSpace(rgb);

@@ -11,7 +11,7 @@ Shader "Hidden/Bibcam/Encoder"
     CGINCLUDE
 
 #include "UnityCG.cginc"
-#include "Packages/jp.keijiro.bibcam/Common/Shaders/Common.hlsl"
+#include "Packages/com.holoi.bibcam-plus/Common/Shaders/Common.hlsl"
 
 // Uniforms from AR Foundation
 sampler2D _textureY;
