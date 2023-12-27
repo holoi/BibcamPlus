@@ -24,8 +24,8 @@ public sealed class BibcamCameraController : MonoBehaviour
     // Transform update without interpolation
     void UpdateTransform(in Metadata meta)
     {
-        transform.position = meta.CameraPosition;
-        transform.rotation = meta.CameraRotation;
+        transform.localPosition = meta.CameraPosition;
+        transform.localRotation = meta.CameraRotation;
     }
 
     // Transform update with interpolation
